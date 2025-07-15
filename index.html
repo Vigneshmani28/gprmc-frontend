@@ -168,7 +168,7 @@
           const blob = await response.blob();
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
-          link.download = "gprmc_data.xlsx";
+          link.download = `gprmc_data_${data.device}.xlsx`;
           link.click();
         } catch (error) {
           alert("❌ Failed to generate file. Please try again.");
