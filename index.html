@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GPRMC Generator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 2rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    label {
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    button {
+      padding: 0.75rem;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>GPRMC Generator</h1>
+    <form id="gprmcForm">
+      <label>Device ID
+        <input type="text" name="device" required />
+      </label>
+      <label>From Latitude
+        <input type="number" step="any" name="fromLat" required />
+      </label>
+      <label>From Longitude
+        <input type="number" step="any" name="fromLon" required />
+      </label>
+      <label>To Latitude
+        <input type="number" step="any" name="toLat" required />
+      </label>
+      <label>To Longitude
+        <input type="number" step="any" name="toLon" required />
+      </label>
+      <label>Number of Points
+        <input type="number" name="count" min="1" required />
+      </label>
+      <button type="submit">Generate Excel</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('gprmcForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        device: form.device.value.toUpperCase(),
+        from: [parseFloat(form.fromLat.value), parseFloat(form.fromLon.value)],
+        to: [parseFloat(form.toLat.value), parseFloat(form.toLon.value)],
+        count: parseInt(form.count.value)
+      };
+
+      const response = await fetch('http://localhost:3000/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'gprmc_data.xlsx';
+      link.click();
+    });
+  </script>
+</body>
+</html>
