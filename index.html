@@ -156,8 +156,9 @@
         };
 
         try {
+          const API_BASE = window.location.origin;
           const response = await fetch(
-            `${process.env.API_END}/generate`,
+            `${API_BASE}/generate`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
