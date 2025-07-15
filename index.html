@@ -156,9 +156,8 @@
         };
 
         try {
-          const API_BASE = window.location.origin;
           const response = await fetch(
-            `${API_BASE}/generate`,
+            `https://gprmc-backend.onrender.com/generate`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
