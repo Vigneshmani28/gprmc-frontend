@@ -157,7 +157,7 @@
 
         try {
           const response = await fetch(
-            "https://gprmc-backend.onrender.com/generate",
+            `${process.env.API_END}/generate`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
